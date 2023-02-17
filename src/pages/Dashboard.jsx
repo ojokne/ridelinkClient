@@ -6,6 +6,7 @@ import OrderCard from "../components/OrderCard";
 import { ACTIONS } from "../context/actions";
 import { useAuthentication, useOrders } from "../context/StateProvider";
 import useAuth from "../utils/useAuth";
+import { useRef } from "react";
 
 const styles = {
   iconLarge: {
@@ -23,7 +24,6 @@ const styles = {
 const Dashboard = () => {
   useAuth();
   const { auth } = useAuthentication();
-
   const { orders, ordersDispatch } = useOrders();
   const [empty, setEmpty] = useState(true);
   const [alert, setAlert] = useState({
@@ -32,19 +32,24 @@ const Dashboard = () => {
     type: "",
   });
   const [loading, setLoading] = useState(true);
+  const effectRan = useRef(false);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/client/orders/1`, {
-          method: "GET",
-          credentials: "include",
-        });
+        const res = await fetch(
+          `http://localhost:5000/client/orders/${auth.id}`,
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         if (data.orders.length > 0) {
           setEmpty(false);
         }
         ordersDispatch({ type: ACTIONS.ADD_ORDERS, orders: data.orders });
+
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -58,7 +63,13 @@ const Dashboard = () => {
         });
       }
     };
-    fetchOrders();
+    if (!effectRan.current) {
+      fetchOrders();
+      return () => {
+        effectRan.current = true;
+        ordersDispatch({ type: ACTIONS.CLEAR_ORDERS });
+      };
+    }
   }, [auth.id, ordersDispatch]);
 
   if (loading) {
@@ -67,6 +78,7 @@ const Dashboard = () => {
 
   return (
     <div className="mx-auto" style={{ maxWidth: "600px" }}>
+      {/* {console.log(orders[0].order)} */}
       {alert.alert && (
         <div
           className="alert alert-warning alert-dismissible fade show m-3 p-3"
@@ -100,9 +112,10 @@ const Dashboard = () => {
             </div>
           </div>
         )}
+        {orders.map((data, index) => {
+          return <OrderCard order={data.order} trip={data.trip} key={index} />;
+        })}
       </div>
-      {/* <OrderCard order={orders]} /> */}
-  
     </div>
   );
 };

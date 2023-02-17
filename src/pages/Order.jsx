@@ -34,7 +34,7 @@ const Order = () => {
 
   useEffect(() => {
     const calculateAmount = (distance) => {
-      return (distance * 5).toLocaleString("en-US");
+      return distance * 5;
     };
     const calculateRoute = async () => {
       try {
@@ -69,7 +69,8 @@ const Order = () => {
       navigate("/quote-form");
     }
     calculateRoute();
-  }, [quote, navigate, distance]);
+    console.log(Number(amountQuoted));
+  }, [quote, navigate, distance, amountQuoted]);
 
   const handleBack = () => {
     navigate("/quote-form");
@@ -157,7 +158,7 @@ const Order = () => {
           {alert.message}
           <button
             type="button"
-            className="btn-close"
+            className="btn-close "
             data-bs-dismiss="alert"
             aria-label="Close"
           ></button>
@@ -166,96 +167,119 @@ const Order = () => {
 
       <div className="bg-white m-3 p-3 rounded shadow-sm">
         <div className="border-bottom p-3 d-flex justify-content-between">
-          <p style={{ fontSize: "1.8em", fontWeight: "lighter" }}>
-            {distance}
-            <span className="text-muted px-2" style={{ fontSize: "0.5em" }}>
-              Km
-            </span>
+          <div>
+            <div>
+              <span className="px-1 lead">{distance}</span>
+              <span
+                className="text-muted px-1"
+                style={{ fontSize: ".7em", fontWeight: "lighter" }}
+              >
+                Km
+              </span>
+            </div>
             <span
-              className="text-muted"
-              style={{ fontSize: ".8rem", display: "block" }}
+              className="text-muted px-1"
+              style={{ fontSize: ".7em", fontWeight: "lighter" }}
             >
               Distance
             </span>
-          </p>
+          </div>
           <span>
             <FaTruckMoving className="icon" />
           </span>
         </div>
         <div className="border-bottom p-3 d-flex justify-content-between">
-          <p style={{ fontSize: "1.8em", fontWeight: "lighter" }}>
-            <span className="text-muted" style={{ fontSize: "0.5em" }}>
-              UGX
-            </span>
-            <span className="px-2">{amountQuoted}</span>
+          <div>
+            <div>
+              <span
+                className="text-muted"
+                style={{ fontSize: ".7em", fontWeight: "lighter" }}
+              >
+                UGX
+              </span>
+              <span className="lead px-2">
+                {amountQuoted.toLocaleString("en-US")}
+              </span>
+            </div>
             <span
               className="text-muted"
-              style={{ fontSize: ".8rem", display: "block" }}
+              style={{ fontSize: ".7em", fontWeight: "lighter" }}
             >
               Amount
             </span>
-          </p>
+          </div>
           <span>
             <FaDollarSign className="icon" />
           </span>
         </div>
 
         <div className="border-bottom p-3 d-flex justify-content-between">
-          <p style={{ fontSize: "1.8em", fontWeight: "lighter" }}>
-            {quote.productWeight}
-            <span className="text-muted px-2" style={{ fontSize: "0.5em" }}>
-              Tonnes
-            </span>
+          <div>
+            <div>
+              <span className="lead">{quote.productWeight}</span>
+              <span
+                className="text-muted px-2"
+                style={{ fontSize: ".7em", fontWeight: "lighter" }}
+              >
+                Tonnes
+              </span>
+            </div>
             <span
               className="text-muted"
-              style={{ fontSize: ".8rem", display: "block" }}
+              style={{ fontSize: ".7em", fontWeight: "lighter" }}
             >
               Weight
             </span>
-          </p>
+          </div>
           <span>
             <FaWeight className="icon" />
           </span>
         </div>
         <div className="border-bottom p-3 d-flex justify-content-between">
-          <p style={{ fontSize: "1.5em", fontWeight: "lighter" }}>
-            {date}
+          <div>
+            <div>
+              <span className="lead">{date}</span>
+            </div>
             <span
               className="text-muted"
-              style={{ fontSize: ".8rem", display: "block" }}
+              style={{ fontSize: ".7em", fontWeight: "lighter" }}
             >
               Schedule Date
             </span>
-          </p>
+          </div>
           <span>
             <FaCalendarAlt className="icon" />
           </span>
         </div>
 
         <div className="border-bottom p-3 d-flex justify-content-between">
-          <p style={{ fontSize: "1.5em", fontWeight: "lighter" }}>
-            {quote.pickupLocation}
+          <div>
+            <div>
+              <span className="lead">{quote.pickupLocation}</span>
+            </div>
             <span
               className="text-muted"
-              style={{ fontSize: ".8rem", display: "block" }}
+              style={{ fontSize: ".7em", fontWeight: "lighter" }}
             >
               Pick up
             </span>
-          </p>
+          </div>
           <span>
             <FaMapMarker className="icon" />
           </span>
         </div>
         <div className="border-bottom p-3 d-flex justify-content-between">
-          <p style={{ fontSize: "1.5em", fontWeight: "lighter" }}>
-            {quote.deliveryLocation}
+          <div>
+            <div>
+              <span className="lead">{quote.deliveryLocation}</span>
+            </div>
             <span
               className="text-muted"
-              style={{ fontSize: ".8rem", display: "block" }}
+              style={{ fontSize: ".7em", fontWeight: "lighter" }}
             >
               Drop off
             </span>
-          </p>
+          </div>
           <span>
             <FaMapMarker
               className="icon"
@@ -265,15 +289,17 @@ const Order = () => {
         </div>
         {quote.deliveryInstructions && (
           <div className="p-3 d-flex justify-content-between">
-            <p style={{ fontSize: "1.5em", fontWeight: "lighter" }}>
-              {quote.deliveryInstructions}
+            <div>
+              <div>
+                <span className="lead">{quote.deliveryInstructions}</span>
+              </div>
               <span
                 className="text-muted"
-                style={{ fontSize: ".8rem", display: "block" }}
+                style={{ fontSize: ".7em", fontWeight: "lighter" }}
               >
                 Delivery Instructions
               </span>
-            </p>
+            </div>
             <span>
               <FaList className="icon" />
             </span>

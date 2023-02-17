@@ -3,9 +3,8 @@ import { useAuthentication } from "../context/StateProvider";
 import useAuth from "../utils/useAuth";
 
 const ProtectedRoutes = () => {
-  useAuth();
   const { auth } = useAuthentication();
-  console.log(auth);
+  useAuth();
   if (auth?.isAuthenticated ?? false) {
     return <Outlet />;
   } else {

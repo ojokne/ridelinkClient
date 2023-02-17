@@ -100,7 +100,7 @@ const Signup = () => {
         <div className="mx-auto">
           <p className="text-center text-muted">Please give us your details</p>
 
-          <form className>
+          <form>
             <div className="m-3">
               <label htmlFor="name" className="form-label">
                 Name

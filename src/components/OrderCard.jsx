@@ -36,7 +36,7 @@ const styles = {
   },
 };
 
-const OrderCard = ({ order }) => {
+const OrderCard = ({ order, trip }) => {
   const amount = Number(order.amountQuoted).toLocaleString("en-US");
   const date = new Date(order.proposedScheduleDate).toDateString();
   const status =

@@ -6,6 +6,7 @@ import { quoteReducer } from "./quoteReducer";
 const AuthenticationContext = createContext();
 const QuoteContext = createContext();
 const OrderContext = createContext();
+
 export const StateProvider = ({ children }) => {
   const [auth, authDispatch] = useReducer(authReducer, {
     isAuthenticated: false,
@@ -22,7 +23,7 @@ export const StateProvider = ({ children }) => {
     deliveryInstructions: "",
   });
 
-  const [orders, ordersDispatch] = useReducer(orderReducer, {});
+  const [orders, ordersDispatch] = useReducer(orderReducer, []);
   return (
     <AuthenticationContext.Provider value={{ auth, authDispatch }}>
       <QuoteContext.Provider value={{ quote, quoteDispatch }}>

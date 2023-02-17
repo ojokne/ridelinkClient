@@ -15,8 +15,9 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/quote-form" element={<QuoteForm />} />
         <Route path="/order" element={<Order />} />
-        <Route element={<ProtectedRoutes />}></Route>
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
 
         <Route path="*" element={<p>Error page</p>} />
       </Routes>
