@@ -15,7 +15,12 @@ const Loader = ({ loading, description }) => {
         aria-label="Loading Spinner"
         data-testid="loader"
       />
-      <h6 className="text-muted">{description}</h6>
+      <span
+        className="text-muted"
+        style={{ fontSize: ".9em", fontWeight: "lighter" }}
+      >
+        {description}
+      </span>
     </div>
   );
 };
