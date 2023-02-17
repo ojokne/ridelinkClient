@@ -1,0 +1,40 @@
+body {
+  background-color: rgb(250, 250, 250);
+}
+
+.ridelink-background-light {
+  background-color: rgb(250, 250, 250);
+}
+.ridelink-background {
+  background-color: #32a885;
+}
+
+.icon {
+  color: white;
+  background-color: #32a885;
+  font-size: 30px;
+  opacity: 0.8;
+  padding: 6px;
+  margin: 6px;
+  border-radius: 50%;
+}
+.ridelink-color {
+  color: #32a885;
+}
+
+.btn:hover {
+  background-color: #32a885;
+  color: white;
+  transform: scale(0.98);
+}
+
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.order-card:hover {
+  background-color: rgb(250, 250, 250);
+}
