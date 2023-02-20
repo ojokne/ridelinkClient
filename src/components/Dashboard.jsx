@@ -4,7 +4,7 @@ import { useAuthentication, useOrders } from "../context/StateProvider";
 
 import { ACTIONS } from "../context/actions";
 import Loader from "./Loader";
-
+const { auth } = useAuthentication();
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const { auth } = useAuthentication();
@@ -18,7 +18,7 @@ const Dashboard = () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_HOST}/client/orders/1`,
+          `${process.env.REACT_APP_API_HOST}/client/orders/${auth.id}`,
           {
             method: "GET",
             credentials: "include",
