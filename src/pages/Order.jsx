@@ -80,26 +80,29 @@ const Order = () => {
     setLoading(true);
     if (auth.isAuthenticated && auth.id) {
       try {
-        const res = await fetch("http://localhost:5000/client/order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            productName: quote.productName,
-            productWeight: quote.productWeight,
-            proposedScheduleDate: quote.proposedScheduleDate,
-            amountQuoted: amountQuoted,
-            pickupLocation: quote.pickupLocation,
-            deliveryLocation: quote.deliveryLocation,
-            deliveryInstructions: quote.deliveryInstructions,
-          }),
-          credentials: "include",
-        });
+        const res = await fetch(
+          `${process.env.REACT_APP_API_HOST}/client/order`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              productName: quote.productName,
+              productWeight: quote.productWeight,
+              proposedScheduleDate: quote.proposedScheduleDate,
+              amountQuoted: amountQuoted,
+              pickupLocation: quote.pickupLocation,
+              deliveryLocation: quote.deliveryLocation,
+              deliveryInstructions: quote.deliveryInstructions,
+            }),
+            credentials: "include",
+          }
+        );
         const data = await res.json();
         setLoading(false);
         if (data.isCreated) {
-          navigate("/dashboard");
+          navigate("/");
           setAlert((prev) => {
             return {
               ...prev,

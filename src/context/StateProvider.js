@@ -23,7 +23,24 @@ export const StateProvider = ({ children }) => {
     deliveryInstructions: "",
   });
 
-  const [orders, ordersDispatch] = useReducer(orderReducer, []);
+  const [orders, ordersDispatch] = useReducer(orderReducer, [
+    {
+      id: "",
+      isConfirmed: "",
+      isCancelled: "",
+      isInvoiceSent: 0,
+      deliveryInstructions: "",
+      amountQuoted: 0,
+      amountPaid: 0,
+      pickupLocation: "",
+      deliveryLocation: "",
+      productName: "",
+      productWeight: 0,
+      proposedScheduleDate: "",
+      clientId: 0,
+      trip: null,
+    },
+  ]);
   return (
     <AuthenticationContext.Provider value={{ auth, authDispatch }}>
       <QuoteContext.Provider value={{ quote, quoteDispatch }}>

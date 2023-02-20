@@ -1,3 +1,15 @@
+@media only screen and (min-width: 768px) {
+  .content-desktop {
+    margin-left: 350px;
+    max-width: 800px;
+  }
+  .menu-desktop {
+    width: 300px;
+    position: fixed;
+    height: 100%;
+  }
+}
+
 body {
   background-color: rgb(250, 250, 250);
 }
@@ -21,6 +33,25 @@ body {
 .ridelink-color {
   color: #32a885;
 }
+.iconSmall {
+  color: white;
+  background-color: #32a885;
+  opacity: 0.8;
+  font-size: 1.3em;
+  padding: 6px;
+  margin: 6px;
+  border-radius: 50%;
+}
+.iconBar {
+  color: #32a885;
+  opacity: 0.8;
+  font-size: 2.6em;
+  padding: 6px;
+  margin: 6px;
+}
+.iconMenu {
+  font-size: 25px;
+}
 
 .btn:hover {
   background-color: #32a885;
@@ -37,4 +68,19 @@ body {
 
 .order-card:hover {
   background-color: rgb(250, 250, 250);
+}
+
+.fixed-left {
+  position: fixed;
+}
+
+.liMenu:hover {
+  background-color: rgb(250, 250, 250);
+  transform: scale(0.95);
+}
+
+logoutBtn:hover {
+  background-color: rgb(250, 250, 250);
+  transform: scale(0.9);
+  border-radius: 6px;
 }

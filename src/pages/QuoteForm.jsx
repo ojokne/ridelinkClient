@@ -5,8 +5,6 @@ import { useQuote } from "../context/StateProvider";
 import { ACTIONS } from "../context/actions";
 import Loader from "../components/Loader";
 
-let API_KEY = "AIzaSyBpkOwOFsWFkDkCwXYMyLh43piW44O5m90";
-
 const QuoteForm = () => {
   const navigate = useNavigate();
   const [libraries] = useState(["places"]);
@@ -23,7 +21,7 @@ const QuoteForm = () => {
   const deliveryLocationRef = useRef();
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: API_KEY,
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAP_API_KEY,
     libraries,
   });
 
