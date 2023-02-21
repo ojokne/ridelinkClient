@@ -1,4 +1,10 @@
-import { FaCheck, FaClock, FaSignOutAlt, FaTasks } from "react-icons/fa";
+import {
+  FaCheck,
+  FaClock,
+  FaSignOutAlt,
+  FaTasks,
+  FaTruckMoving,
+} from "react-icons/fa";
 import { useAuthentication } from "../context/StateProvider";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -57,6 +63,14 @@ const MobileMenu = () => {
                 className="icon iconMenu"
                 style={{ backgroundColor: "#ffc107" }}
               />
+            </span>
+          </li>
+        </Link>
+        <Link className="text-decoration-none" to="quote-form">
+          <li className="py-2 border-bottom d-flex align-items-center liMenu d-flex justify-content-between align-items-center">
+            <span className="text-muted">Get Quote</span>
+            <span>
+              <FaTruckMoving className="icon iconMenu" />
             </span>
           </li>
         </Link>

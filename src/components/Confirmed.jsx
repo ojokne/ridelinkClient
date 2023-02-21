@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useOrders } from "../context/StateProvider";
+import { useData } from "../context/StateProvider";
 
 const Confirmed = () => {
   const [delivered, setDelivered] = useState(0);
   const [confirmed, setConfirmed] = useState(0);
-  const { orders } = useOrders();
+  const { data } = useData();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (orders[0].order?.amountQuoted) {
-      for (let i = 0; i < orders.length; i++) {
-        let order = orders[i].order;
+    if (data.data) {
+      for (let i = 0; i < data.data.length; i++) {
+        let order = data.data[i].order;
         if (order.isConfirmed) {
           setConfirmed((prev) => prev + 1);
           if (order.trip) {
@@ -28,7 +28,7 @@ const Confirmed = () => {
       setConfirmed(0);
       setDelivered(0);
     };
-  }, [orders, navigate]);
+  }, [data, navigate]);
   return (
     <div>
       <div className="mx-3 pt-3 lead text-muted">

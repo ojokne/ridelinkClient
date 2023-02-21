@@ -1,11 +1,11 @@
 import { createContext, useContext, useReducer } from "react";
 import { authReducer } from "./authReducer";
-import { orderReducer } from "./orderReducer";
+import { dataReducer } from "./dataReducer";
 import { quoteReducer } from "./quoteReducer";
 
 const AuthenticationContext = createContext();
 const QuoteContext = createContext();
-const OrderContext = createContext();
+const DataContext = createContext();
 
 export const StateProvider = ({ children }) => {
   const [auth, authDispatch] = useReducer(authReducer, {
@@ -23,30 +23,13 @@ export const StateProvider = ({ children }) => {
     deliveryInstructions: "",
   });
 
-  const [orders, ordersDispatch] = useReducer(orderReducer, [
-    {
-      id: "",
-      isConfirmed: "",
-      isCancelled: "",
-      isInvoiceSent: 0,
-      deliveryInstructions: "",
-      amountQuoted: 0,
-      amountPaid: 0,
-      pickupLocation: "",
-      deliveryLocation: "",
-      productName: "",
-      productWeight: 0,
-      proposedScheduleDate: "",
-      clientId: 0,
-      trip: null,
-    },
-  ]);
+  const [data, dataDispatch] = useReducer(dataReducer, {});
   return (
     <AuthenticationContext.Provider value={{ auth, authDispatch }}>
       <QuoteContext.Provider value={{ quote, quoteDispatch }}>
-        <OrderContext.Provider value={{ orders, ordersDispatch }}>
+        <DataContext.Provider value={{ data, dataDispatch }}>
           {children}
-        </OrderContext.Provider>
+        </DataContext.Provider>
       </QuoteContext.Provider>
     </AuthenticationContext.Provider>
   );
@@ -60,6 +43,6 @@ export const useQuote = () => {
   return useContext(QuoteContext);
 };
 
-export const useOrders = () => {
-  return useContext(OrderContext);
+export const useData = () => {
+  return useContext(DataContext);
 };
