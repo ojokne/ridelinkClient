@@ -1,12 +1,12 @@
 import { ACTIONS } from "./actions";
 
-export const orderReducer = (state, payload) => {
+export const dataReducer = (state, payload) => {
   switch (payload.type) {
     case ACTIONS.ADD_ORDERS: {
-      return [...state, ...payload.orders];
+      return { ...state, data: payload.orders };
     }
     case ACTIONS.CLEAR_ORDERS: {
-      return [];
+      return {};
     }
     default:
       return state;

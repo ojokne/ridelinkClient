@@ -25,7 +25,6 @@ function App() {
             <Route path="pending" element={<Pending />} />
           </Route>
         </Route>
-
         <Route path="*" element={<p>Error page</p>} />
       </Routes>
     </div>

@@ -41,13 +41,12 @@ const QuoteForm = () => {
     navigate("/order");
   };
   if (!isLoaded) {
-    console.log("Loading script");
     return <Loader loading={!isLoaded} description="Loading, please wait" />;
   }
   return (
     <div>
       <div className="mx-auto" style={{ maxWidth: "500px" }}>
-        <p className="text-center text-muted">
+        <p className="text-center text-muted m-3 p-3">
           Please fill in the form below to get a quote
         </p>
         <form className="bg-white rounded shadow-sm m-3 p-3">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaTruckMoving } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useOrders } from "../context/StateProvider";
+import { useData } from "../context/StateProvider";
 
 const styles = {
   iconLarge: {
@@ -16,38 +16,41 @@ const styles = {
 };
 
 const Pending = () => {
-  const { orders } = useOrders();
+  const { data } = useData();
 
   const navigate = useNavigate();
 
-  const [data, setData] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    if (orders[0].order?.amountQuoted) {
-      for (let i = 0; i < orders.length; i++) {
-        let order = orders[i].order;
-        let amountQuoted = Number(order.amountQuoted).toLocaleString("en-Us");
-        let date = new Date(order.proposedScheduleDate).toDateString();
-        let obj = {
-          proposedScheduleDate: order.proposedScheduleDate,
-          amountQuoted,
-          date,
-          id: order.id,
-          productName: order.productName,
-          productWeight: order.productWeight,
-          pickupLocation: order.pickupLocation,
-          deliveryLocation: order.deliveryLocation,
-          deliveryInstructions: order.deliveryInstructions,
-        };
-        setData((prev) => [...prev, obj]);
+    if (data.data) {
+      for (let i = 0; i < data.data.length; i++) {
+        let order = data.data[i].order;
+        if (!order.isConfirmed) {
+          let amountQuoted = Number(order.amountQuoted).toLocaleString("en-Us");
+          let date = new Date(order.proposedScheduleDate).toDateString();
+          let obj = {
+            proposedScheduleDate: order.proposedScheduleDate,
+            amountQuoted,
+            date,
+            id: order.id,
+            productName: order.productName,
+            productWeight: order.productWeight,
+            pickupLocation: order.pickupLocation,
+            deliveryLocation: order.deliveryLocation,
+            deliveryInstructions: order.deliveryInstructions,
+          };
+          setOrders((prev) => [...prev, obj]);
+        }
       }
     } else {
       navigate("/");
     }
+
     return () => {
-      setData([]);
+      setOrders([]);
     };
-  }, [orders, navigate]);
+  }, [data, navigate]);
 
   return (
     <div>
@@ -56,7 +59,7 @@ const Pending = () => {
       </div>
 
       <div className="d-flex   flex-wrap">
-        {data.map((order, index) => {
+        {orders.map((order, index) => {
           return (
             <div
               className="d-flex flex-row m-3 p-4 bg-white shadow-sm rounded"

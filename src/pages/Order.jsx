@@ -69,7 +69,6 @@ const Order = () => {
       navigate("/quote-form");
     }
     calculateRoute();
-    console.log(Number(amountQuoted));
   }, [quote, navigate, distance, amountQuoted]);
 
   const handleBack = () => {
