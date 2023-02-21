@@ -68,7 +68,7 @@ const Dashboard = () => {
         <span>Dashboard</span>
       </div>
 
-      {orders.length && (
+      {orders.length > 0 && (
         <div>
           <div className="d-flex justify-content-center align-items-center flex-wrap">
             <div
