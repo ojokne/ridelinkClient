@@ -98,6 +98,7 @@ const Order = () => {
           }
         );
         const data = await res.json();
+        console.log(data);
         setLoading(false);
         if (data.isCreated) {
           navigate("/");
@@ -120,8 +121,8 @@ const Order = () => {
             };
           });
         }
-      } catch {
-        console.log("An error occured");
+      } catch (e) {
+        console.log(e);
         setAlert((prev) => {
           return {
             ...prev,
