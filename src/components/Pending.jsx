@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { FaTruckMoving } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../context/StateProvider";
+import { Link } from "react-router-dom";
 
 const styles = {
   iconLarge: {
@@ -178,6 +179,16 @@ const Pending = () => {
           );
         })}
       </div>
+      {!data.data && (
+        <div className="m-3 p-3 bg-white shadow-sm rounded lead text-center">
+          <p> You have not placed any orders</p>
+          <p>
+            <Link to="/quote-form" className="text-decoration-none">
+              Get Quote
+            </Link>
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -6,7 +6,7 @@ import {
   FaDollarSign,
   FaList,
 } from "react-icons/fa";
-import { useAuthentication, useQuote } from "../context/StateProvider";
+import { useQuote } from "../context/StateProvider";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ACTIONS } from "../context/actions";
@@ -14,8 +14,7 @@ import Loader from "../components/Loader";
 import useAuth from "../utils/useAuth";
 
 const Order = () => {
-  useAuth();
-  const { auth } = useAuthentication();
+  const id = useAuth();
   const navigate = useNavigate();
   const { quote, quoteDispatch } = useQuote();
   const [amountQuoted, setAmount] = useState(0);
@@ -77,7 +76,7 @@ const Order = () => {
 
   const handleOrder = async () => {
     setLoading(true);
-    if (auth.isAuthenticated && auth.id) {
+    if (id) {
       try {
         const res = await fetch(
           `${process.env.REACT_APP_API_HOST}/client/order`,

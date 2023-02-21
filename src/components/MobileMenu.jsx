@@ -5,15 +5,11 @@ import {
   FaTasks,
   FaTruckMoving,
 } from "react-icons/fa";
-import { useAuthentication } from "../context/StateProvider";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { ACTIONS } from "../context/actions";
 
 const MobileMenu = () => {
   const navigate = useNavigate();
-
-  const { authDispatch } = useAuthentication();
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -28,7 +24,7 @@ const MobileMenu = () => {
       });
       const data = await res.json();
       if (data.isLoggedOut) {
-        authDispatch({ type: ACTIONS.LOGOUT });
+        sessionStorage.removeItem("id");
         navigate("/login");
       }
     } catch (e) {

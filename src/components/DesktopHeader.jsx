@@ -1,12 +1,9 @@
 import logo from "../assets/img/logo.png";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAuthentication } from "../context/StateProvider";
-import { ACTIONS } from "../context/actions";
 
 const DesktopHeader = () => {
   const navigate = useNavigate();
-  const { authDispatch } = useAuthentication();
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -21,7 +18,7 @@ const DesktopHeader = () => {
       });
       const data = await res.json();
       if (data.isLoggedOut) {
-        authDispatch({ type: ACTIONS.LOGOUT });
+        sessionStorage.removeItem("id");
         navigate("/login");
       }
     } catch (e) {

@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { FaCheck, FaClock } from "react-icons/fa";
-import { useAuthentication, useData } from "../context/StateProvider";
+import { useData } from "../context/StateProvider";
 import { Link } from "react-router-dom";
 import { ACTIONS } from "../context/actions";
 import Loader from "./Loader";
+import useAuth from "../utils/useAuth";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
@@ -14,14 +15,13 @@ const Dashboard = () => {
   const [amountQuoted, setAmountQuoted] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
   const effectRan = useRef(false);
-  const { auth } = useAuthentication();
-
+  let id = useAuth();
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
       try {
         const res = await fetch(
-          `${process.env.REACT_APP_API_HOST}/client/orders/${auth.id}`,
+          `${process.env.REACT_APP_API_HOST}/client/orders/${id}`,
           {
             method: "GET",
             credentials: "include",
@@ -57,7 +57,7 @@ const Dashboard = () => {
     return () => {
       effectRan.current = true;
     };
-  }, [auth, dataDispatch]);
+  }, [id, dataDispatch]);
 
   if (loading) {
     return <Loader loading={loading} description="Please wait" />;
@@ -121,7 +121,7 @@ const Dashboard = () => {
                   />
                 </span>
                 <span className="me-3" style={{ fontSize: "30px" }}>
-                  {amountQuoted}
+                  {amountQuoted.toLocaleString("en-US")}
                 </span>
               </div>
             </div>
@@ -137,7 +137,7 @@ const Dashboard = () => {
                   <FaCheck className="icon iconMenu me-3" />
                 </span>
                 <span className="me-3" style={{ fontSize: "30px" }}>
-                  {amountPaid}
+                  {amountPaid.toLocaleString("en-US")}
                 </span>
               </div>
             </div>
@@ -146,10 +146,10 @@ const Dashboard = () => {
       )}
 
       {!orders.length > 0 && (
-        <div className="bg-white rounded shadow-sm m-3 p-4 text-center">
+        <div className="m-3 p-3 bg-white shadow-sm rounded lead text-center">
+          <p> You have not placed any orders</p>
           <p>
-            You have not placed any orders,
-            <Link to="quote-form" className="text-decoration-none ps-1 lead">
+            <Link to="/quote-form" className="text-decoration-none">
               Get Quote
             </Link>
           </p>
