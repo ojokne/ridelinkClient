@@ -145,7 +145,7 @@ const Dashboard = () => {
         </div>
       )}
 
-      {!orders.length && (
+      {!orders.length > 0 && (
         <div className="bg-white rounded shadow-sm m-3 p-4 text-center">
           <p>
             You have not placed any orders,
