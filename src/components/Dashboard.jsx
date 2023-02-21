@@ -4,7 +4,7 @@ import { useAuthentication, useOrders } from "../context/StateProvider";
 
 import { ACTIONS } from "../context/actions";
 import Loader from "./Loader";
-const { auth } = useAuthentication();
+
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const { auth } = useAuthentication();
