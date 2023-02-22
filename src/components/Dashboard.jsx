@@ -25,6 +25,7 @@ const Dashboard = () => {
           {
             method: "GET",
             credentials: "include",
+            mode: "cors",
           }
         );
         const data = await res.json();

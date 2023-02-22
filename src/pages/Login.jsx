@@ -39,9 +39,11 @@ const Login = () => {
           role: 2,
         }),
         credentials: "include",
+        mode: "cors",
       });
       const data = await res.json();
       setLoading(false);
+      console.log(data);
       if (data.isAuthenticated) {
         sessionStorage.setItem("id", data.id);
         navigate("/");
