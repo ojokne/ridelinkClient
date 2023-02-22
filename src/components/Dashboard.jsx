@@ -29,9 +29,10 @@ const Dashboard = () => {
           }
         );
         const data = await res.json();
+        console.log(data);
         setOrders(data.orders);
         dataDispatch({ type: ACTIONS.ADD_ORDERS, orders: data.orders });
-        if (data.orders.length) {
+        if (data.orders) {
           let ordersArray = data.orders;
           for (let i = 0; i < ordersArray.length; i++) {
             let order = ordersArray[i].order;
