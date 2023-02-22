@@ -53,12 +53,12 @@ const Dashboard = () => {
         setLoading(false);
       }
     };
-    if (effectRan.current) {
-      fetchOrders();
-    }
-    return () => {
-      effectRan.current = true;
-    };
+    fetchOrders();
+    // if (effectRan.current) {
+    // }
+    // return () => {
+    //   effectRan.current = true;
+    // };
   }, [id, dataDispatch]);
 
   if (loading) {
