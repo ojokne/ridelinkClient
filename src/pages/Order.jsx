@@ -101,7 +101,7 @@ const Order = () => {
         console.log(data);
         setLoading(false);
         if (data.isCreated) {
-          // navigate("/");
+          navigate("/");
           setAlert((prev) => {
             return {
               ...prev,
