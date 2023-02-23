@@ -98,9 +98,7 @@ const Pending = () => {
                         >
                           UGX
                         </span>
-                        <span className="text-muted">
-                          {order.productWeight}
-                        </span>
+                        <span className="text-muted">{order.amountQuoted}</span>
                       </div>
                       <span
                         className="px-1"
