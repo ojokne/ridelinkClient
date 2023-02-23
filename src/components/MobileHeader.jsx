@@ -22,7 +22,7 @@ const MobileHeader = () => {
       </div>
       {!display && (
         <div className="px-3 bg-white shadow-sm">
-          <MobileMenu />
+          <MobileMenu handleShowMenu={handleShowMenu} />
         </div>
       )}
     </div>
