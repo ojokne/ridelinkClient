@@ -29,7 +29,6 @@ const Dashboard = () => {
           }
         );
         const data = await res.json();
-        console.log(data);
         setOrders(data.orders);
         dataDispatch({ type: ACTIONS.ADD_ORDERS, orders: data.orders });
         if (data.orders) {
