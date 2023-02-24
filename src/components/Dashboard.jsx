@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCheck, FaClock } from "react-icons/fa";
 import { useData } from "../context/StateProvider";
 import { Link } from "react-router-dom";
@@ -14,8 +14,8 @@ const Dashboard = () => {
   const [pending, setPending] = useState(0);
   const [amountQuoted, setAmountQuoted] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
-  const effectRan = useRef(false);
   let id = useAuth();
+
   useEffect(() => {
     const fetchOrders = async () => {
       setLoading(true);
