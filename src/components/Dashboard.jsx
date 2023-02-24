@@ -53,11 +53,6 @@ const Dashboard = () => {
       }
     };
     fetchOrders();
-    // if (effectRan.current) {
-    // }
-    // return () => {
-    //   effectRan.current = true;
-    // };
   }, [id, dataDispatch]);
 
   if (loading) {
