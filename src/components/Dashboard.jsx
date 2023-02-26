@@ -145,7 +145,7 @@ const Dashboard = () => {
         <div className="m-3 p-3 bg-white shadow-sm rounded lead text-center">
           <p> You have not placed any orders</p>
           <p>
-            <Link to="/quote-form" className="text-decoration-none">
+            <Link to="/quote" className="text-decoration-none">
               Get Quote
             </Link>
           </p>

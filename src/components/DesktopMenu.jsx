@@ -33,7 +33,7 @@ const DesktopMenu = () => {
             <span className="text-muted">Pending</span>
           </li>
         </Link>
-        <Link className="text-decoration-none" to="quote-form">
+        <Link className="text-decoration-none" to="quote">
           <li className="py-2 border-bottom liMenu">
             <span>
               <FaTruck className="icon iconMenu" />

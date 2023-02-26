@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
 import { useQuote } from "../context/StateProvider";
 import { ACTIONS } from "../context/actions";
 import Loader from "../components/Loader";
+import Logo from "../components/Logo";
 
 const QuoteForm = () => {
   const navigate = useNavigate();
@@ -45,11 +47,15 @@ const QuoteForm = () => {
   }
   return (
     <div>
-      <div className="mx-auto" style={{ maxWidth: "500px" }}>
-        <p className="text-center text-muted m-3 p-3">
-          Please fill in the form below to get a quote
-        </p>
-        <form className="bg-white rounded shadow-sm m-3 p-3">
+      <div
+        className="mx-auto bg-white rounded shadow-sm m-3 p-3"
+        style={{ maxWidth: "600px" }}
+      >
+        <Logo />
+        <form>
+          <p className="text-center text-muted m-3 p-3">
+            Please fill in the form below to get a quote
+          </p>
           <div className="m-3">
             <label htmlFor="name" className="form-label">
               Product Name
@@ -141,6 +147,11 @@ const QuoteForm = () => {
             Get Quote
           </button>
         </form>
+        <div className="m-3">
+          <Link to="/" className="text-decoration-none ridelink-color">
+            My account
+          </Link>
+        </div>
       </div>
     </div>
   );

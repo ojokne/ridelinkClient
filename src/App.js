@@ -5,7 +5,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import Signup from "./pages/Signup";
 import Order from "./pages/Order";
 import Home from "./pages/Home";
-import QuoteForm from "./pages/QuoteForm";
+import Quote from "./pages/Quote";
 import Dashboard from "./components/Dashboard";
 import Confirmed from "./components/Confirmed";
 import Pending from "./components/Pending";
@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
-        <Route path="quote-form" element={<QuoteForm />} />
+        <Route path="quote" element={<Quote />} />
         <Route path="order" element={<Order />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/" element={<Home />}>

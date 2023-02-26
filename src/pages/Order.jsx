@@ -19,6 +19,7 @@ const Order = () => {
   const { quote, quoteDispatch } = useQuote();
   const [amountQuoted, setAmount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [description, setDescription] = useState("");
   const [alert, setAlert] = useState({
     alert: false,
     message: "",
@@ -36,6 +37,8 @@ const Order = () => {
       return distance * 5;
     };
     const calculateRoute = async () => {
+      setLoading(true);
+      setDescription("We are generating quote, please wait");
       try {
         // eslint-disable-next-line
         const directionsService = new google.maps.DirectionsService();
@@ -49,6 +52,8 @@ const Order = () => {
         setDirectionsResponse(results);
         setDistance(results.routes[0].legs[0].distance.value / 1000);
         setAmount(calculateAmount(results.routes[0].legs[0].distance.value));
+        setLoading(false);
+        setDescription("");
       } catch (e) {
         console.log(e);
         setAlert((prev) => {
@@ -71,11 +76,12 @@ const Order = () => {
   }, [quote, navigate, distance, amountQuoted]);
 
   const handleBack = () => {
-    navigate("/quote-form");
+    navigate("/quote");
   };
 
   const handleOrder = async () => {
     setLoading(true);
+    setDescription("We are processing your order, please wait");
     if (id) {
       try {
         const res = await fetch(
@@ -144,12 +150,7 @@ const Order = () => {
   };
 
   if (loading) {
-    return (
-      <Loader
-        loading={loading}
-        description="We are processing your order, please wait"
-      />
-    );
+    return <Loader loading={loading} description={description} />;
   }
 
   return (

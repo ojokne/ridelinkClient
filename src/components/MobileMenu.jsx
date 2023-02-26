@@ -76,7 +76,7 @@ const MobileMenu = ({ handleShowMenu }) => {
         </Link>
         <Link
           className="text-decoration-none"
-          to="quote-form"
+          to="quote"
           onClick={() => handleShowMenu()}
         >
           <li className="py-2 border-bottom d-flex align-items-center liMenu d-flex justify-content-between align-items-center">
