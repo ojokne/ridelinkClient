@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [pending, setPending] = useState(0);
   const [amountQuoted, setAmountQuoted] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
+    const [display, setDisplay] = useState(false);
   let id = useAuth();
 
   useEffect(() => {
@@ -31,7 +32,9 @@ const Dashboard = () => {
         const data = await res.json();
         setOrders(data.orders);
         dataDispatch({ type: ACTIONS.ADD_ORDERS, orders: data.orders });
-        if (data.orders) {
+                if (data.hasOwnProperty("orders")) {
+
+        if (data.orders.length) {
           let ordersArray = data.orders;
           for (let i = 0; i < ordersArray.length; i++) {
             let order = ordersArray[i].order;
@@ -44,8 +47,9 @@ const Dashboard = () => {
             setAmountQuoted((prev) => prev + order.amountQuoted);
             setAmountPaid((prev) => prev + order.amountPaid);
           }
+          setDisplay(true)
         }
-
+      }
         setLoading(false);
       } catch (e) {
         console.log(e);
@@ -64,7 +68,7 @@ const Dashboard = () => {
         <span>Dashboard</span>
       </div>
 
-      {orders.length > 0 && (
+      {display && (
         <div>
           <div className="d-flex justify-content-center align-items-center flex-wrap">
             <div
@@ -141,7 +145,7 @@ const Dashboard = () => {
         </div>
       )}
 
-      {!orders.length > 0 && (
+      {!display > 0 && (
         <div className="m-3 p-3 bg-white shadow-sm rounded lead text-center">
           <p> You have not placed any orders</p>
           <p>
