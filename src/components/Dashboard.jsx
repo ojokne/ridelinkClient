@@ -14,7 +14,7 @@ const Dashboard = () => {
   const [pending, setPending] = useState(0);
   const [amountQuoted, setAmountQuoted] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
-    const [display, setDisplay] = useState(false);
+  const [display, setDisplay] = useState(false);
   let id = useAuth();
 
   useEffect(() => {
@@ -32,24 +32,23 @@ const Dashboard = () => {
         const data = await res.json();
         setOrders(data.orders);
         dataDispatch({ type: ACTIONS.ADD_ORDERS, orders: data.orders });
-                if (data.hasOwnProperty("orders")) {
+        if (data.hasOwnProperty("orders")) {
+          if (data.orders.length) {
+            let ordersArray = data.orders;
+            for (let i = 0; i < ordersArray.length; i++) {
+              let order = ordersArray[i].order;
 
-        if (data.orders.length) {
-          let ordersArray = data.orders;
-          for (let i = 0; i < ordersArray.length; i++) {
-            let order = ordersArray[i].order;
-
-            if (order.isConfirmed) {
-              setConfirmed((prev) => prev + 1);
-            } else {
-              setPending((prev) => prev + 1);
+              if (order.isConfirmed) {
+                setConfirmed((prev) => prev + 1);
+              } else {
+                setPending((prev) => prev + 1);
+              }
+              setAmountQuoted((prev) => prev + order.amountQuoted);
+              setAmountPaid((prev) => prev + order.amountPaid);
             }
-            setAmountQuoted((prev) => prev + order.amountQuoted);
-            setAmountPaid((prev) => prev + order.amountPaid);
+            setDisplay(true);
           }
-          setDisplay(true)
         }
-      }
         setLoading(false);
       } catch (e) {
         console.log(e);
