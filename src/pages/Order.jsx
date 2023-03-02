@@ -11,10 +11,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ACTIONS } from "../context/actions";
 import Loader from "../components/Loader";
-import useAuth from "../utils/useAuth";
+import useId from "../utils/useId";
+import useToken from "../utils/useToken";
 
 const Order = () => {
-  const id = useAuth();
+  const id = useId();
+  const token = useToken();
   const navigate = useNavigate();
   const { quote, quoteDispatch } = useQuote();
   const [amountQuoted, setAmount] = useState(0);
@@ -82,7 +84,7 @@ const Order = () => {
   const handleOrder = async () => {
     setLoading(true);
     setDescription("We are processing your order, please wait");
-    if (id) {
+    if (id && token) {
       try {
         const res = await fetch(
           `${process.env.REACT_APP_API_HOST}/client/order`,
@@ -90,6 +92,7 @@ const Order = () => {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: token,
             },
             body: JSON.stringify({
               productName: quote.productName,
@@ -100,10 +103,10 @@ const Order = () => {
               deliveryLocation: quote.deliveryLocation,
               deliveryInstructions: quote.deliveryInstructions,
             }),
-            credentials: "include",
           }
         );
         const data = await res.json();
+        console.log(data);
         setLoading(false);
         if (data.isCreated) {
           navigate("/");

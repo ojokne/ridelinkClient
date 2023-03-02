@@ -7,23 +7,8 @@ const DesktopHeader = () => {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    try {
-      const res = await fetch(`${process.env.REACT_APP_API_HOST}/logout`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (data.isLoggedOut) {
-        sessionStorage.removeItem("id");
-        navigate("/login");
-      }
-    } catch (e) {
-      console.log(e);
-    }
+    sessionStorage.clear();
+    navigate("/login");
   };
   return (
     <div>

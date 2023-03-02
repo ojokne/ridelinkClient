@@ -4,18 +4,21 @@ import { useData } from "../context/StateProvider";
 import { Link } from "react-router-dom";
 import { ACTIONS } from "../context/actions";
 import Loader from "./Loader";
-import useAuth from "../utils/useAuth";
+import useId from "../utils/useId";
+import useToken from "../utils/useToken";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const { dataDispatch } = useData();
+  // eslint-disable-next-line
   const [orders, setOrders] = useState([]);
   const [confirmed, setConfirmed] = useState(0);
   const [pending, setPending] = useState(0);
   const [amountQuoted, setAmountQuoted] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
   const [display, setDisplay] = useState(false);
-  let id = useAuth();
+  const id = useId();
+  const token = useToken();
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -25,8 +28,10 @@ const Dashboard = () => {
           `${process.env.REACT_APP_API_HOST}/client/orders/${id}`,
           {
             method: "GET",
-            credentials: "include",
-            mode: "cors",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: token,
+            },
           }
         );
         const data = await res.json();
@@ -56,7 +61,7 @@ const Dashboard = () => {
       }
     };
     fetchOrders();
-  }, [id, dataDispatch]);
+  }, [id, token, dataDispatch]);
 
   if (loading) {
     return <Loader loading={loading} description="Please wait" />;
