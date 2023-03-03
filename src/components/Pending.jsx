@@ -53,11 +53,10 @@ const Pending = () => {
     return () => {
       setOrders([]);
     };
-  }, [data, navigate]);
+  }, [data]);
 
   return (
     <div>
-      {console.log(display)}
       <div className="mx-3 pt-3 lead text-muted">
         <span>Pending Orders</span>
       </div>
