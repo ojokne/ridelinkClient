@@ -40,7 +40,6 @@ const Login = () => {
         }),
       });
       const data = await res.json();
-      console.log(data);
       setLoading(false);
       if (data.isAuthenticated) {
         sessionStorage.setItem("clientId", data.id);
