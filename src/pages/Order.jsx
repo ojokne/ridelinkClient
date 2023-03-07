@@ -11,8 +11,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ACTIONS } from "../context/actions";
 import Loader from "../components/Loader";
-import useId from "../utils/useId";
-import useToken from "../utils/useToken";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../config/firebase";
 
