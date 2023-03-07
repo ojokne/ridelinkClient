@@ -1,64 +1,85 @@
-import { useRef, useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import Logo from "../components/Logo";
+import { auth } from "../config/firebase";
 
 const Signup = () => {
   const showPasswordRef = useRef();
-  const nameRef = useRef();
-  const phoneRef = useRef();
-  const emailRef = useRef();
   const passwordRef = useRef();
+
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [nameError, setNameError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [emailError, setEmailError] = useState("");
+
   const navigate = useNavigate();
   const [alert, setAlert] = useState({
     alert: false,
     message: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  const handleSignup = async (e, name, phone, email, password) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
-    setLoading(true);
+
+    if (!name.length) {
+      setNameError("Name cannot be empty");
+      return;
+    }
+
+    if (phone.length < 10) {
+      setPhoneError("Should be atleast 10 characters");
+      return;
+    }
+
+    if (!email.length) {
+      setEmailError("Email cannot be empty");
+      return;
+    }
+
+    if (password.length < 6) {
+      setPasswordError("Password should be atleast 6 characters");
+      return;
+    }
 
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_API_HOST}/client/signup`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            phoneNumber: phone,
-            email,
-            password,
-            role: 2,
-          }),
-        }
-      );
-      const data = await res.json();
+      setLoading(true);
+      await createUserWithEmailAndPassword(auth, email, password);
       setLoading(false);
+      navigate("/");
+    } catch (e) {
+      setLoading(false);
+      console.log(e.code);
+      const errorCode = e.code;
 
-      if (data.isCreated) {
-        navigate("/login");
-        setAlert((prev) => {
-          return { ...prev, alert: false, message: "" };
-        });
-      } else {
-        setAlert((prev) => {
-          return { ...prev, alert: true, message: data.msg };
-        });
+      switch (errorCode) {
+        case "auth/email-already-in-use":
+          setAlert((prev) => {
+            return { ...prev, alert: true, message: "Email already in use" };
+          });
+          break;
+
+        case "auth/weak-password":
+          setAlert((prev) => {
+            return { ...prev, alert: true, message: "Weak password" };
+          });
+          break;
+        default: {
+          setAlert((prev) => {
+            return { ...prev, alert: true, message: "An error occured" };
+          });
+        }
       }
-    } catch {
-      console.log("An error occured");
-      setAlert((prev) => {
-        return {
-          ...prev,
-          alert: true,
-          message: "An error occurred, Please try again",
-        };
-      });
     }
   };
   const handleShowPassword = () => {
@@ -69,13 +90,18 @@ const Signup = () => {
       passwordField.type = "password";
     }
   };
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      setLoading(false);
+      if (user) {
+        navigate("/");
+      }
+    });
+  }, [navigate]);
+
   if (loading) {
-    return (
-      <Loader
-        loading={loading}
-        description="We are creating you account, please wait"
-      />
-    );
+    return <Loader loading={loading} description="Loading" />;
   }
 
   return (
@@ -112,9 +138,21 @@ const Signup = () => {
                 className="form-control"
                 id="name"
                 placeholder="John Doe"
-                ref={nameRef}
+                value={name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setNameError("");
+                }}
                 required
               />
+              {nameError && (
+                <div
+                  className="text-danger small my-2"
+                  style={{ fontSize: ".6em" }}
+                >
+                  <span>{nameError}</span>
+                </div>
+              )}
             </div>
             <div className="m-3">
               <label htmlFor="phone" className="form-label">
@@ -125,9 +163,21 @@ const Signup = () => {
                 className="form-control"
                 id="phone"
                 placeholder="+256 712345678"
-                ref={phoneRef}
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  setPhoneError("");
+                }}
                 required
               />
+              {phoneError && (
+                <div
+                  className="text-danger small my-2"
+                  style={{ fontSize: ".6em" }}
+                >
+                  <span>{phoneError}</span>
+                </div>
+              )}
             </div>
             <div className="m-3">
               <label htmlFor="email" className="form-label">
@@ -137,10 +187,22 @@ const Signup = () => {
                 type="email"
                 className="form-control"
                 id="email"
-                ref={emailRef}
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailError("");
+                }}
                 placeholder="oen@example.com"
                 required
               />
+              {emailError && (
+                <div
+                  className="text-danger small my-2"
+                  style={{ fontSize: ".6em" }}
+                >
+                  <span>{emailError}</span>
+                </div>
+              )}
             </div>
             <div className="m-3">
               <label htmlFor="password" className="form-label">
@@ -150,9 +212,22 @@ const Signup = () => {
                 type="password"
                 className="form-control"
                 id="password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordError("");
+                }}
                 ref={passwordRef}
                 required
               />
+              {passwordError && (
+                <div
+                  className="text-danger small my-2 muted"
+                  style={{ fontSize: ".6em" }}
+                >
+                  <span>{passwordError}</span>
+                </div>
+              )}
             </div>
             <div className="m-3 form-check">
               <input
@@ -169,15 +244,7 @@ const Signup = () => {
             <button
               type="submit"
               className="m-3 btn ridelink-background text-white "
-              onClick={(e) =>
-                handleSignup(
-                  e,
-                  nameRef.current.value,
-                  phoneRef.current.value,
-                  emailRef.current.value,
-                  passwordRef.current.value
-                )
-              }
+              onClick={(e) => handleSignup(e)}
             >
               Create my account
             </button>

@@ -18,12 +18,11 @@ function App() {
         <Route path="signup" element={<Signup />} />
         <Route path="quote" element={<Quote />} />
         <Route path="order" element={<Order />} />
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/" element={<Home />}>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="confirmed" element={<Confirmed />} />
-            <Route path="pending" element={<Pending />} />
-          </Route>
+        <Route element={<ProtectedRoutes />}></Route>
+        <Route path="/" element={<Home />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="confirmed" element={<Confirmed />} />
+          <Route path="pending" element={<Pending />} />
         </Route>
         <Route path="*" element={<p>Error page</p>} />
       </Routes>

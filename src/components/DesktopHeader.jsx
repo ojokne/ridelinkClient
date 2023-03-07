@@ -1,14 +1,21 @@
 import logo from "../assets/img/logo.png";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth } from "../config/firebase";
 
 const DesktopHeader = () => {
   const navigate = useNavigate();
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    sessionStorage.clear();
-    navigate("/login");
+
+    try {
+      await signOut(auth);
+      navigate("/login");
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <div>

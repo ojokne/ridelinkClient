@@ -3,6 +3,9 @@ import { FaTruckMoving } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../context/StateProvider";
 import { Link } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../config/firebase";
+import Loader from "./Loader";
 
 const styles = {
   iconLarge: {
@@ -22,39 +25,51 @@ const Pending = () => {
 
   const [orders, setOrders] = useState([]);
   const [display, setDisplay] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // useEffect(() => {
+  //   if (data.hasOwnProperty("data")) {
+  //     if (data.data.length) {
+  //       for (let i = 0; i < data.data.length; i++) {
+  //         let order = data.data[i].order;
+  //         if (!order.isConfirmed) {
+  //           let amountQuoted = Number(order.amountQuoted).toLocaleString(
+  //             "en-Us"
+  //           );
+  //           let date = new Date(order.proposedScheduleDate).toDateString();
+  //           let obj = {
+  //             proposedScheduleDate: order.proposedScheduleDate,
+  //             amountQuoted,
+  //             date,
+  //             id: order.id,
+  //             productName: order.productName,
+  //             productWeight: order.productWeight,
+  //             pickupLocation: order.pickupLocation,
+  //             deliveryLocation: order.deliveryLocation,
+  //             deliveryInstructions: order.deliveryInstructions,
+  //           };
+  //           setOrders((prev) => [...prev, obj]);
+  //         }
+  //       }
+  //       setDisplay(true);
+  //     }
+  //   }
+  //   return () => {
+  //     setOrders([]);
+  //   };
+  // }, [data]);
 
   useEffect(() => {
-    if (data.hasOwnProperty("data")) {
-      if (data.data.length) {
-        for (let i = 0; i < data.data.length; i++) {
-          let order = data.data[i].order;
-          if (!order.isConfirmed) {
-            let amountQuoted = Number(order.amountQuoted).toLocaleString(
-              "en-Us"
-            );
-            let date = new Date(order.proposedScheduleDate).toDateString();
-            let obj = {
-              proposedScheduleDate: order.proposedScheduleDate,
-              amountQuoted,
-              date,
-              id: order.id,
-              productName: order.productName,
-              productWeight: order.productWeight,
-              pickupLocation: order.pickupLocation,
-              deliveryLocation: order.deliveryLocation,
-              deliveryInstructions: order.deliveryInstructions,
-            };
-            setOrders((prev) => [...prev, obj]);
-          }
-        }
-        setDisplay(true);
+    onAuthStateChanged(auth, (user) => {
+      setLoading(false);
+      if (!user) {
+        navigate("/login");
       }
-    }
-    return () => {
-      setOrders([]);
-    };
-  }, [data]);
-
+    });
+  }, [navigate]);
+  if (loading) {
+    return <Loader loading={loading} description="Please wait" />;
+  }
   return (
     <div>
       <div className="mx-3 pt-3 lead text-muted">

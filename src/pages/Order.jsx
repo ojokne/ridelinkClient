@@ -13,10 +13,10 @@ import { ACTIONS } from "../context/actions";
 import Loader from "../components/Loader";
 import useId from "../utils/useId";
 import useToken from "../utils/useToken";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../config/firebase";
 
 const Order = () => {
-  const id = useId();
-  const token = useToken();
   const navigate = useNavigate();
   const { quote, quoteDispatch } = useQuote();
   const [amountQuoted, setAmount] = useState(0);
@@ -72,7 +72,7 @@ const Order = () => {
       !quote.hasOwnProperty("pickupLocation") ||
       !quote.hasOwnProperty("deliveryLocation")
     ) {
-      navigate("/quote-form");
+      navigate("/quote");
     }
     calculateRoute();
   }, [quote, navigate, distance, amountQuoted]);
@@ -83,73 +83,97 @@ const Order = () => {
 
   const handleOrder = async () => {
     setLoading(true);
+    setAlert((prev) => {
+      return {
+        ...prev,
+        alert: false,
+        message: "",
+        class: "",
+      };
+    });
     setDescription("We are processing your order, please wait");
-    if (id && token) {
-      try {
-        const res = await fetch(
-          `${process.env.REACT_APP_API_HOST}/client/order`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token,
-            },
-            body: JSON.stringify({
-              productName: quote.productName,
-              productWeight: quote.productWeight,
-              proposedScheduleDate: quote.proposedScheduleDate,
-              amountQuoted: amountQuoted,
-              pickupLocation: quote.pickupLocation,
-              deliveryLocation: quote.deliveryLocation,
-              deliveryInstructions: quote.deliveryInstructions,
-            }),
-          }
-        );
-        const data = await res.json();
-        console.log(data);
-        setLoading(false);
-        if (data.isCreated) {
-          navigate("/");
-          setAlert((prev) => {
-            return {
-              ...prev,
-              alert: true,
-              message: "Order placed successfully",
-              class: "alert alert-success alert-dismissible fade show m-3 p-3",
-            };
-          });
-          quoteDispatch({ type: ACTIONS.CLEAR_QUOTE });
-        } else {
-          setAlert((prev) => {
-            return {
-              ...prev,
-              alert: true,
-              message: "Failed to place order",
-              class: "alert alert-danger alert-dismissible fade show m-3 p-3",
-            };
-          });
-        }
-      } catch (e) {
-        console.log(e);
+    // if (id && token) {
+    //   try {
+    //     const res = await fetch(
+    //       `${process.env.REACT_APP_API_HOST}/client/order`,
+    //       {
+    //         method: "POST",
+    //         headers: {
+    //           "Content-Type": "application/json",
+    //           Authorization: token,
+    //         },
+    //         body: JSON.stringify({
+    //           productName: quote.productName,
+    //           productWeight: quote.productWeight,
+    //           proposedScheduleDate: quote.proposedScheduleDate,
+    //           amountQuoted: amountQuoted,
+    //           pickupLocation: quote.pickupLocation,
+    //           deliveryLocation: quote.deliveryLocation,
+    //           deliveryInstructions: quote.deliveryInstructions,
+    //         }),
+    //       }
+    //     );
+    //     const data = await res.json();
+    //     console.log(data);
+    //     setLoading(false);
+    //     if (data.isCreated) {
+    //       navigate("/");
+    //       setAlert((prev) => {
+    //         return {
+    //           ...prev,
+    //           alert: true,
+    //           message: "Order placed successfully",
+    //           class: "alert alert-success alert-dismissible fade show m-3 p-3",
+    //         };
+    //       });
+    //       quoteDispatch({ type: ACTIONS.CLEAR_QUOTE });
+    //     } else {
+    //       setAlert((prev) => {
+    //         return {
+    //           ...prev,
+    //           alert: true,
+    //           message: "Failed to place order",
+    //           class: "alert alert-danger alert-dismissible fade show m-3 p-3",
+    //         };
+    //       });
+    //     }
+    //   } catch (e) {
+    //     console.log(e);
+    //     setAlert((prev) => {
+    //       return {
+    //         ...prev,
+    //         alert: true,
+    //         message: "An error occurred, Please try again",
+    //         class: "alert alert-danger alert-dismissible fade show m-3 p-3",
+    //       };
+    //     });
+    //   }
+    // } else {
+    // setAlert((prev) => {
+    //   return {
+    //     ...prev,
+    //     alert: true,
+    //     message: "You must be logged in to make an order",
+    //     class: "alert alert-warning alert-dismissible fade show m-3 p-3",
+    //   };
+    // });
+    // }
+
+    onAuthStateChanged(auth, (user) => {
+      setLoading(false);
+      if (!user) {
         setAlert((prev) => {
           return {
             ...prev,
             alert: true,
-            message: "An error occurred, Please try again",
-            class: "alert alert-danger alert-dismissible fade show m-3 p-3",
+            message: "You must be logged in to make an order",
+            class: "alert alert-warning alert-dismissible fade show m-3 p-3",
           };
         });
+      } else {
+        console.log("Placed ");
       }
-    } else {
-      setAlert((prev) => {
-        return {
-          ...prev,
-          alert: true,
-          message: "You must be logged in to make an order",
-          class: "alert alert-warning alert-dismissible fade show m-3 p-3",
-        };
-      });
-    }
+    });
   };
 
   if (loading) {

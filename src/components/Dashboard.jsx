@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
 import { FaCheck, FaClock } from "react-icons/fa";
 import { useData } from "../context/StateProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ACTIONS } from "../context/actions";
 import Loader from "./Loader";
 import useId from "../utils/useId";
 import useToken from "../utils/useToken";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../config/firebase";
 
 const Dashboard = () => {
-  const [loading, setLoading] = useState(false);
-  const { dataDispatch } = useData();
+  const [loading, setLoading] = useState(true);
   // eslint-disable-next-line
   const [orders, setOrders] = useState([]);
   const [confirmed, setConfirmed] = useState(0);
@@ -17,52 +18,60 @@ const Dashboard = () => {
   const [amountQuoted, setAmountQuoted] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
   const [display, setDisplay] = useState(false);
-  const id = useId();
-  const token = useToken();
+
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  // const fetchOrders = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await fetch(
+  //       `${process.env.REACT_APP_API_HOST}/client/orders/${id}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: token,
+  //         },
+  //       }
+  //     );
+  //     const data = await res.json();
+  //     setOrders(data.orders);
+  //     dataDispatch({ type: ACTIONS.ADD_ORDERS, orders: data.orders });
+  //     if (data.hasOwnProperty("orders")) {
+  //       if (data.orders.length) {
+  //         let ordersArray = data.orders;
+  //         for (let i = 0; i < ordersArray.length; i++) {
+  //           let order = ordersArray[i].order;
+
+  //           if (order.isConfirmed) {
+  //             setConfirmed((prev) => prev + 1);
+  //           } else {
+  //             setPending((prev) => prev + 1);
+  //           }
+  //           setAmountQuoted((prev) => prev + order.amountQuoted);
+  //           setAmountPaid((prev) => prev + order.amountPaid);
+  //         }
+  //         setDisplay(true);
+  //       }
+  //     }
+  //     setLoading(false);
+  //   } catch (e) {
+  //     console.log(e);
+  //     setLoading(false);
+  //   }
+  // };
+  // fetchOrders();
+  // }, [id, token, dataDispatch]);
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(
-          `${process.env.REACT_APP_API_HOST}/client/orders/${id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: token,
-            },
-          }
-        );
-        const data = await res.json();
-        setOrders(data.orders);
-        dataDispatch({ type: ACTIONS.ADD_ORDERS, orders: data.orders });
-        if (data.hasOwnProperty("orders")) {
-          if (data.orders.length) {
-            let ordersArray = data.orders;
-            for (let i = 0; i < ordersArray.length; i++) {
-              let order = ordersArray[i].order;
-
-              if (order.isConfirmed) {
-                setConfirmed((prev) => prev + 1);
-              } else {
-                setPending((prev) => prev + 1);
-              }
-              setAmountQuoted((prev) => prev + order.amountQuoted);
-              setAmountPaid((prev) => prev + order.amountPaid);
-            }
-            setDisplay(true);
-          }
-        }
-        setLoading(false);
-      } catch (e) {
-        console.log(e);
-        setLoading(false);
+    onAuthStateChanged(auth, (user) => {
+      setLoading(false);
+      if (!user) {
+        navigate("/login");
       }
-    };
-    fetchOrders();
-  }, [id, token, dataDispatch]);
-
+    });
+  }, [navigate]);
   if (loading) {
     return <Loader loading={loading} description="Please wait" />;
   }
@@ -72,7 +81,7 @@ const Dashboard = () => {
         <span>Dashboard</span>
       </div>
 
-      {display && (
+      {/* {display && (
         <div>
           <div className="d-flex justify-content-center align-items-center flex-wrap">
             <div
@@ -158,7 +167,7 @@ const Dashboard = () => {
             </Link>
           </p>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

@@ -43,7 +43,7 @@ const QuoteForm = () => {
     navigate("/order");
   };
   if (!isLoaded) {
-    return <Loader loading={!isLoaded} description="Loading, please wait" />;
+    return <Loader loading={!isLoaded} description="Loading" />;
   }
   return (
     <div>

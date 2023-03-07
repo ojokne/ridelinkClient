@@ -3,6 +3,9 @@ import { FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useData } from "../context/StateProvider";
 import { Link } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../config/firebase";
+import Loader from "./Loader";
 
 const Confirmed = () => {
   const [delivered, setDelivered] = useState(0);
@@ -10,23 +13,36 @@ const Confirmed = () => {
   const { data } = useData();
   const navigate = useNavigate();
   const [display, setDisplay] = useState(false);
+  const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   if (data.hasOwnProperty("data")) {
+  //     if (data.data.length) {
+  //       for (let i = 0; i < data.data.length; i++) {
+  //         let order = data.data[i].order;
+  //         if (order.isConfirmed) {
+  //           setConfirmed((prev) => prev + 1);
+  //           if (order.trip) {
+  //             setDelivered((prev) => prev + 1);
+  //           }
+  //         }
+  //       }
+  //       setDisplay(true);
+  //     }
+  //   }
+  // }, [data, navigate]);
 
   useEffect(() => {
-    if (data.hasOwnProperty("data")) {
-      if (data.data.length) {
-        for (let i = 0; i < data.data.length; i++) {
-          let order = data.data[i].order;
-          if (order.isConfirmed) {
-            setConfirmed((prev) => prev + 1);
-            if (order.trip) {
-              setDelivered((prev) => prev + 1);
-            }
-          }
-        }
-        setDisplay(true);
+    onAuthStateChanged(auth, (user) => {
+      setLoading(false);
+      if (!user) {
+        navigate("/login");
       }
-    }
-  }, [data, navigate]);
+    });
+  }, [navigate]);
+
+  if (loading) {
+    return <Loader loading={loading} description="Please wait" />;
+  }
   return (
     <div>
       <div className="mx-3 pt-3 lead text-muted">
