@@ -158,7 +158,6 @@ const Order = () => {
     // }
 
     onAuthStateChanged(auth, (user) => {
-      setLoading(false);
       if (!user) {
         setAlert((prev) => {
           return {
@@ -168,6 +167,7 @@ const Order = () => {
             class: "alert alert-warning alert-dismissible fade show m-3 p-3",
           };
         });
+        setLoading(false);
       } else {
         console.log("Placed ");
       }

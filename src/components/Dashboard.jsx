@@ -66,10 +66,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      setLoading(false);
       if (!user) {
         navigate("/login");
       }
+      setLoading(false);
     });
   }, [navigate]);
   if (loading) {

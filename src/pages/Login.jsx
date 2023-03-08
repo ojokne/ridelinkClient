@@ -90,10 +90,10 @@ const Login = () => {
   };
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      setLoading(false);
       if (user) {
         navigate("/");
       }
+      setLoading(false);
     });
   }, [navigate]);
 
