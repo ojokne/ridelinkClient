@@ -15,12 +15,20 @@ const QuoteForm = () => {
   const [productWeight, setProductWeight] = useState(quote.productWeight);
   const [productName, setProductName] = useState(quote.productName);
   const [scheduleDate, setScheduleDate] = useState(quote.proposedScheduleDate);
+  const [pickupLocation, setPickupLocation] = useState("");
+  const [deliveryLocation, setDeliveryLocation] = useState("");
   const [deliveryInstructions, setDeliveryInstructions] = useState(
     quote.deliveryInstructions
   );
 
   const pickupLocationRef = useRef();
   const deliveryLocationRef = useRef();
+
+  const [productNameError, setProductNameError] = useState("");
+  const [productWeightError, setProductWeightError] = useState("");
+  const [scheduleDateError, setScheduleDateError] = useState("");
+  const [pickupLocationError, setPickupLocationError] = useState("");
+  const [deliveryLocationError, setDeliveryLocationError] = useState("");
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -29,6 +37,31 @@ const QuoteForm = () => {
 
   const handleOrder = async (e) => {
     e.preventDefault();
+
+    if (productName.length < 1) {
+      setProductNameError("Product name is required");
+      return;
+    }
+    if (productWeight < 1) {
+      setProductWeightError("Product weight is required");
+      return;
+    }
+
+    if (scheduleDate.length < 1) {
+      setScheduleDateError("Schedule date is required");
+      return;
+    }
+
+    if (pickupLocation.length < 1) {
+      setPickupLocationError("Pickup Location is required");
+      return;
+    }
+
+    if (deliveryLocation.length < 1) {
+      setDeliveryLocationError("Delivery Location is required");
+      return;
+    }
+
     let obj = {
       productName,
       productWeight,
@@ -37,7 +70,6 @@ const QuoteForm = () => {
       deliveryLocation: deliveryLocationRef.current.value,
       deliveryInstructions,
     };
-
     quoteDispatch({ type: ACTIONS.ADD_QUOTE, quote: obj });
 
     navigate("/order");
@@ -67,8 +99,19 @@ const QuoteForm = () => {
               required
               placeholder="Cement"
               value={productName}
-              onChange={(e) => setProductName(e.target.value)}
+              onChange={(e) => {
+                setProductName(e.target.value);
+                setProductNameError("");
+              }}
             />
+            {productNameError && (
+              <div
+                className="text-danger small my-2"
+                style={{ fontSize: ".6em" }}
+              >
+                <span>{productNameError}</span>
+              </div>
+            )}
           </div>
           <div className="m-3">
             <label htmlFor="weight" className="form-label">
@@ -82,8 +125,19 @@ const QuoteForm = () => {
               placeholder="Weight"
               min={0}
               value={productWeight}
-              onChange={(e) => setProductWeight(e.target.value)}
+              onChange={(e) => {
+                setProductWeight(e.target.value);
+                setProductWeightError("");
+              }}
             />
+            {productWeightError && (
+              <div
+                className="text-danger small my-2"
+                style={{ fontSize: ".6em" }}
+              >
+                <span>{productWeightError}</span>
+              </div>
+            )}
           </div>
           <div className="m-3">
             <label htmlFor="scheduleDate" className="form-label">
@@ -97,6 +151,14 @@ const QuoteForm = () => {
               value={scheduleDate}
               onChange={(e) => setScheduleDate(e.target.value)}
             />
+            {scheduleDateError && (
+              <div
+                className="text-danger small my-2"
+                style={{ fontSize: ".6em" }}
+              >
+                <span>{scheduleDateError}</span>
+              </div>
+            )}
           </div>
           <div className="m-3">
             <label htmlFor="pickup" className="form-label">
@@ -107,11 +169,24 @@ const QuoteForm = () => {
                 type="text"
                 className="form-control"
                 id="pickup"
+                value={pickupLocation}
+                onChange={(e) => {
+                  setPickupLocation(e.target.value);
+                  setPickupLocationError("");
+                }}
                 required
                 placeholder="Mombasa"
                 ref={pickupLocationRef}
               />
             </Autocomplete>
+            {pickupLocationError && (
+              <div
+                className="text-danger small my-2"
+                style={{ fontSize: ".6em" }}
+              >
+                <span>{pickupLocationError}</span>
+              </div>
+            )}
           </div>
           <div className="m-3">
             <label htmlFor="delivery" className="form-label">
@@ -122,11 +197,24 @@ const QuoteForm = () => {
                 type="text"
                 className="form-control"
                 id="delivery"
+                value={deliveryLocation}
+                onChange={(e) => {
+                  setDeliveryLocation(e.target.value);
+                  setDeliveryLocationError("");
+                }}
                 required
                 placeholder="Kampala"
                 ref={deliveryLocationRef}
               />
             </Autocomplete>
+            {deliveryLocationError && (
+              <div
+                className="text-danger small my-2"
+                style={{ fontSize: ".6em" }}
+              >
+                <span>{deliveryLocationError}</span>
+              </div>
+            )}
           </div>
           <div className="m-3">
             <label htmlFor="instructions">Delivery Instructions if any</label>

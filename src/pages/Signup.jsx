@@ -33,7 +33,7 @@ const Signup = () => {
     e.preventDefault();
 
     if (!name.length) {
-      setNameError("Name cannot be empty");
+      setNameError("Name is required");
       return;
     }
 
@@ -43,7 +43,7 @@ const Signup = () => {
     }
 
     if (!email.length) {
-      setEmailError("Email cannot be empty");
+      setEmailError("Email is required");
       return;
     }
 

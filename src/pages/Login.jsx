@@ -37,7 +37,7 @@ const Login = () => {
       return { ...prev, alert: false, message: "" };
     });
     if (!email.length) {
-      setEmailError("Email cannot be empty");
+      setEmailError("Email is required");
       return;
     }
 
