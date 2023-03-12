@@ -25,7 +25,7 @@ const DesktopHeader = () => {
         </div>
         <div className="d-flex flex-row ">
           <div className="px-2 d-flex justify-content-between align-items-center">
-            <span className="px-1 lead">Client</span>
+            <span className="px-1 text-muted">Client</span>
             <span>
               <FaUser className="icon iconMenu" />
             </span>

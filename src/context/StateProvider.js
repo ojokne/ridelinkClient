@@ -1,5 +1,5 @@
 import { createContext, useContext, useReducer } from "react";
-import { dataReducer } from "./dataReducer";
+import { orderReducer } from "./orderReducer";
 import { quoteReducer } from "./quoteReducer";
 
 const QuoteContext = createContext();
@@ -16,10 +16,10 @@ export const StateProvider = ({ children }) => {
     deliveryInstructions: "",
   });
 
-  const [data, dataDispatch] = useReducer(dataReducer, {});
+  const [orders, ordersDispatch] = useReducer(orderReducer, {});
   return (
     <QuoteContext.Provider value={{ quote, quoteDispatch }}>
-      <DataContext.Provider value={{ data, dataDispatch }}>
+      <DataContext.Provider value={{ orders, ordersDispatch }}>
         {children}
       </DataContext.Provider>
     </QuoteContext.Provider>
@@ -30,6 +30,6 @@ export const useQuote = () => {
   return useContext(QuoteContext);
 };
 
-export const useData = () => {
+export const useOrders = () => {
   return useContext(DataContext);
 };

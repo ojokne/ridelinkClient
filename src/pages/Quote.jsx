@@ -52,12 +52,12 @@ const QuoteForm = () => {
       return;
     }
 
-    if (pickupLocation.length < 1) {
+    if (pickupLocationRef.current.value.length < 1) {
       setPickupLocationError("Pickup Location is required");
       return;
     }
 
-    if (deliveryLocation.length < 1) {
+    if (deliveryLocationRef.current.value.length < 1) {
       setDeliveryLocationError("Delivery Location is required");
       return;
     }
@@ -74,6 +74,7 @@ const QuoteForm = () => {
 
     navigate("/order");
   };
+
   if (!isLoaded) {
     return <Loader loading={!isLoaded} description="Loading" />;
   }
@@ -169,12 +170,8 @@ const QuoteForm = () => {
                 type="text"
                 className="form-control"
                 id="pickup"
-                value={pickupLocation}
-                onChange={(e) => {
-                  setPickupLocation(e.target.value);
-                  setPickupLocationError("");
-                }}
                 required
+                onFocus={() => setPickupLocationError("")}
                 placeholder="Mombasa"
                 ref={pickupLocationRef}
               />
@@ -197,11 +194,7 @@ const QuoteForm = () => {
                 type="text"
                 className="form-control"
                 id="delivery"
-                value={deliveryLocation}
-                onChange={(e) => {
-                  setDeliveryLocation(e.target.value);
-                  setDeliveryLocationError("");
-                }}
+                onFocus={() => setDeliveryLocationError("")}
                 required
                 placeholder="Kampala"
                 ref={deliveryLocationRef}

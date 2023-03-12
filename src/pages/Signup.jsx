@@ -2,11 +2,12 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
 } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Loader from "../components/Loader";
 import Logo from "../components/Logo";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
 
 const Signup = () => {
   const showPasswordRef = useRef();
@@ -54,12 +55,17 @@ const Signup = () => {
 
     try {
       setLoading(true);
-      await createUserWithEmailAndPassword(auth, email, password);
+      let user = await createUserWithEmailAndPassword(auth, email, password);
+      await setDoc(doc(db, "clients", user.user.uid), {
+        name,
+        phone,
+        email,
+      });
       setLoading(false);
       navigate("/");
     } catch (e) {
       setLoading(false);
-      console.log(e.code);
+      console.log(e);
       const errorCode = e.code;
 
       switch (errorCode) {

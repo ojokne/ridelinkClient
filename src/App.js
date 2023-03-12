@@ -9,6 +9,8 @@ import Quote from "./pages/Quote";
 import Dashboard from "./components/Dashboard";
 import Confirmed from "./components/Confirmed";
 import Pending from "./components/Pending";
+import Trip from "./components/Trip";
+import Delivered from "./components/Delivered";
 
 function App() {
   return (
@@ -21,7 +23,10 @@ function App() {
         <Route element={<ProtectedRoutes />}></Route>
         <Route path="/" element={<Home />}>
           <Route path="/" element={<Dashboard />} />
-          <Route path="confirmed" element={<Confirmed />} />
+          <Route path="confirmed" element={<Confirmed />}>
+            <Route path="trip" element={<Trip />} />
+            <Route path="delivered" element={<Delivered />} />
+          </Route>
           <Route path="pending" element={<Pending />} />
         </Route>
         <Route path="*" element={<p>Error page</p>} />

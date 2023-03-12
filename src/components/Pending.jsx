@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { FaTruckMoving } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useData } from "../context/StateProvider";
+import { useOrders } from "../context/StateProvider";
 import { Link } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../config/firebase";
@@ -20,53 +20,50 @@ const styles = {
 };
 
 const Pending = () => {
-  const { data } = useData();
+  const { orders } = useOrders();
   const navigate = useNavigate();
-
-  const [orders, setOrders] = useState([]);
   const [display, setDisplay] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   if (data.hasOwnProperty("data")) {
-  //     if (data.data.length) {
-  //       for (let i = 0; i < data.data.length; i++) {
-  //         let order = data.data[i].order;
-  //         if (!order.isConfirmed) {
-  //           let amountQuoted = Number(order.amountQuoted).toLocaleString(
-  //             "en-Us"
-  //           );
-  //           let date = new Date(order.proposedScheduleDate).toDateString();
-  //           let obj = {
-  //             proposedScheduleDate: order.proposedScheduleDate,
-  //             amountQuoted,
-  //             date,
-  //             id: order.id,
-  //             productName: order.productName,
-  //             productWeight: order.productWeight,
-  //             pickupLocation: order.pickupLocation,
-  //             deliveryLocation: order.deliveryLocation,
-  //             deliveryInstructions: order.deliveryInstructions,
-  //           };
-  //           setOrders((prev) => [...prev, obj]);
-  //         }
-  //       }
-  //       setDisplay(true);
-  //     }
-  //   }
-  //   return () => {
-  //     setOrders([]);
-  //   };
-  // }, [data]);
+  const [pendingOrders, setPendingOrders] = useState([]);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (!user) {
         navigate("/login");
+      } else {
+        if (orders.hasOwnProperty("orders")) {
+          if (orders.orders.length) {
+            for (let i = 0; i < orders.orders.length; i++) {
+              let order = orders.orders[i];
+              if (!order.isConfirmed) {
+                let amountQuoted = Number(order.amountQuoted).toLocaleString(
+                  "en-Us"
+                );
+                let date = new Date(order.scheduleDate).toDateString();
+                let obj = {
+                  amountQuoted,
+                  date,
+                  id: order.id,
+                  productName: order.productName,
+                  productWeight: order.productWeight,
+                  pickupLocation: order.pickupLocation,
+                  deliveryLocation: order.deliveryLocation,
+                  deliveryInstructions: order.deliveryInstructions,
+                };
+                setPendingOrders((prev) => [...prev, obj]);
+              }
+            }
+          }
+          setDisplay(true);
+        }
       }
       setLoading(false);
     });
-  }, [navigate]);
+
+    return () => {
+      setPendingOrders([]);
+    };
+  }, [navigate, orders]);
   if (loading) {
     return <Loader loading={loading} description="Please wait" />;
   }
@@ -78,7 +75,7 @@ const Pending = () => {
 
       {display && (
         <div className="d-flex flex-row flex-wrap">
-          {orders.map((order, index) => {
+          {pendingOrders.map((order, index) => {
             return (
               <div
                 className="d-flex flex-row m-3 p-4 bg-white shadow-sm rounded"
@@ -88,70 +85,60 @@ const Pending = () => {
                 <span>
                   <FaTruckMoving style={styles.iconLarge} />
                 </span>
+
                 <div className="d-flex flex-column">
-                  <div className="d-flex flex-row justify-content-between">
-                    <div className="d-flex flex-column">
-                      <span className="px-1 text-muted">
-                        {order.productName}
-                      </span>
-                      <span
-                        className="px-1"
-                        style={{ fontSize: ".6em", fontWeight: "lighter" }}
-                      >
-                        Product Name
-                      </span>
-                    </div>
-                    <div className="d-flex flex-column">
-                      <span className="text-danger px-1">{order.id}</span>
-                      <span
-                        style={{ fontSize: ".6em", fontWeight: "lighter" }}
-                        className="px-1"
-                      >
-                        Order Number
-                      </span>
-                    </div>
+                  <div className="d-flex flex-column my-2">
+                    <span className="text-danger px-1">{order.id}</span>
+                    <span
+                      style={{ fontSize: ".6em", fontWeight: "lighter" }}
+                      className="px-1"
+                    >
+                      Order Number
+                    </span>
                   </div>
                   <div className="d-flex flex-column my-2">
-                    <div className="d-flex flex-row justify-content-between">
-                      <div className="d-flex flex-column">
-                        <div>
-                          <span
-                            className="px-1"
-                            style={{ fontSize: ".6em", fontWeight: "lighter" }}
-                          >
-                            UGX
-                          </span>
-                          <span className="text-muted">
-                            {order.amountQuoted}
-                          </span>
-                        </div>
-                        <span
-                          className="px-1"
-                          style={{ fontSize: ".6em", fontWeight: "lighter" }}
-                        >
-                          Amount
-                        </span>
-                      </div>
-                      <div className="d-flex flex-column px-3">
-                        <div>
-                          <span className="text-muted">
-                            {order.productWeight}
-                          </span>
-                          <span
-                            className=""
-                            style={{ fontSize: ".6em", fontWeight: "lighter" }}
-                          >
-                            Tonnes
-                          </span>
-                        </div>
-                        <span
-                          className=""
-                          style={{ fontSize: ".6em", fontWeight: "lighter" }}
-                        >
-                          Weight
-                        </span>
-                      </div>
+                    <span className="px-1 text-muted">{order.productName}</span>
+                    <span
+                      className="px-1"
+                      style={{ fontSize: ".6em", fontWeight: "lighter" }}
+                    >
+                      Product Name
+                    </span>
+                  </div>
+
+                  <div className="d-flex flex-column my-2">
+                    <div>
+                      <span
+                        className="px-1"
+                        style={{ fontSize: ".6em", fontWeight: "lighter" }}
+                      >
+                        UGX
+                      </span>
+                      <span className="text-muted">{order.amountQuoted}</span>
                     </div>
+                    <span
+                      className="px-1"
+                      style={{ fontSize: ".6em", fontWeight: "lighter" }}
+                    >
+                      Amount
+                    </span>
+                  </div>
+                  <div className="d-flex flex-column my-2">
+                    <div>
+                      <span className="text-muted">{order.productWeight}</span>
+                      <span
+                        className=""
+                        style={{ fontSize: ".6em", fontWeight: "lighter" }}
+                      >
+                        Tonnes
+                      </span>
+                    </div>
+                    <span
+                      className=""
+                      style={{ fontSize: ".6em", fontWeight: "lighter" }}
+                    >
+                      Weight
+                    </span>
                   </div>
                   <div className="d-flex flex-column my-2">
                     <span className="px-1 text-muted">{order.date}</span>

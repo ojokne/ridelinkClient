@@ -1,9 +1,9 @@
 import { ACTIONS } from "./actions";
 
-export const dataReducer = (state, payload) => {
+export const orderReducer = (state, payload) => {
   switch (payload.type) {
     case ACTIONS.ADD_ORDERS: {
-      return { ...state, data: payload.orders };
+      return { ...state, orders: payload.orders };
     }
     case ACTIONS.CLEAR_ORDERS: {
       return {};

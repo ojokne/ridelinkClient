@@ -8,11 +8,12 @@ import {
 } from "react-icons/fa";
 import { useQuote } from "../context/StateProvider";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ACTIONS } from "../context/actions";
 import Loader from "../components/Loader";
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../config/firebase";
+import { auth, db } from "../config/firebase";
+import { addDoc, collection } from "firebase/firestore";
 
 const Order = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const Order = () => {
   // eslint-disable-next-line
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState();
-
+  const orderCollectionRef = collection(db, "orders");
   useEffect(() => {
     const calculateAmount = (distance) => {
       return distance * 5;
@@ -79,7 +80,7 @@ const Order = () => {
     navigate("/quote");
   };
 
-  const handleOrder = async () => {
+  const handleOrder = () => {
     setLoading(true);
     setAlert((prev) => {
       return {
@@ -90,72 +91,6 @@ const Order = () => {
       };
     });
     setDescription("We are processing your order, please wait");
-    // if (id && token) {
-    //   try {
-    //     const res = await fetch(
-    //       `${process.env.REACT_APP_API_HOST}/client/order`,
-    //       {
-    //         method: "POST",
-    //         headers: {
-    //           "Content-Type": "application/json",
-    //           Authorization: token,
-    //         },
-    //         body: JSON.stringify({
-    //           productName: quote.productName,
-    //           productWeight: quote.productWeight,
-    //           proposedScheduleDate: quote.proposedScheduleDate,
-    //           amountQuoted: amountQuoted,
-    //           pickupLocation: quote.pickupLocation,
-    //           deliveryLocation: quote.deliveryLocation,
-    //           deliveryInstructions: quote.deliveryInstructions,
-    //         }),
-    //       }
-    //     );
-    //     const data = await res.json();
-    //     console.log(data);
-    //     setLoading(false);
-    //     if (data.isCreated) {
-    //       navigate("/");
-    //       setAlert((prev) => {
-    //         return {
-    //           ...prev,
-    //           alert: true,
-    //           message: "Order placed successfully",
-    //           class: "alert alert-success alert-dismissible fade show m-3 p-3",
-    //         };
-    //       });
-    //       quoteDispatch({ type: ACTIONS.CLEAR_QUOTE });
-    //     } else {
-    //       setAlert((prev) => {
-    //         return {
-    //           ...prev,
-    //           alert: true,
-    //           message: "Failed to place order",
-    //           class: "alert alert-danger alert-dismissible fade show m-3 p-3",
-    //         };
-    //       });
-    //     }
-    //   } catch (e) {
-    //     console.log(e);
-    //     setAlert((prev) => {
-    //       return {
-    //         ...prev,
-    //         alert: true,
-    //         message: "An error occurred, Please try again",
-    //         class: "alert alert-danger alert-dismissible fade show m-3 p-3",
-    //       };
-    //     });
-    //   }
-    // } else {
-    // setAlert((prev) => {
-    //   return {
-    //     ...prev,
-    //     alert: true,
-    //     message: "You must be logged in to make an order",
-    //     class: "alert alert-warning alert-dismissible fade show m-3 p-3",
-    //   };
-    // });
-    // }
 
     onAuthStateChanged(auth, (user) => {
       if (!user) {
@@ -163,13 +98,53 @@ const Order = () => {
           return {
             ...prev,
             alert: true,
-            message: "You must be logged in to make an order",
+            message: (
+              <div className="">
+                <span>Please </span>
+                <Link
+                  to="/login"
+                  className="text-decoration-none ridelink-color"
+                >
+                  Login
+                </Link>
+                <span> to make an order</span>
+              </div>
+            ),
             class: "alert alert-warning alert-dismissible fade show m-3 p-3",
           };
         });
         setLoading(false);
       } else {
-        console.log("Placed ");
+        addDoc(orderCollectionRef, {
+          clientId: auth.currentUser.uid,
+          productName: quote.productName,
+          productWeight: quote.productWeight,
+          scheduleDate: quote.proposedScheduleDate,
+          amountQuoted: amountQuoted,
+          pickupLocation: quote.pickupLocation,
+          deliveryLocation: quote.deliveryLocation,
+          deliveryInstructions: quote.deliveryInstructions,
+          isConfirmed: false,
+          isLoaded: false,
+          isDelivered: false,
+          orderPlacedAt: new Date().getTime(),
+        })
+          .then((res) => {
+            quoteDispatch({ type: ACTIONS.CLEAR_QUOTE });
+            navigate("/");
+            setLoading(false);
+          })
+          .catch((e) => {
+            console.log(e);
+            setAlert((prev) => {
+              return {
+                ...prev,
+                alert: true,
+                message: "Failed to place order",
+                class: "alert alert-danger alert-dismissible fade show m-3 p-3",
+              };
+            });
+          });
       }
     });
   };
@@ -183,6 +158,7 @@ const Order = () => {
       {alert.alert && (
         <div className={alert.class} role="alert">
           {alert.message}
+
           <button
             type="button"
             className="btn-close "
