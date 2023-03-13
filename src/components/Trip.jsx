@@ -44,10 +44,12 @@ const Trip = () => {
     <div>
       <div className="mx-3 pt-3 lead text-muted d-flex justify-content-between align-items-center">
         <span>On trip</span>
-
         <span>
           <Link to="/confirmed" className="text-decoration-none ridelink-color">
-            <FaTimes className="icon me-3" style={{ backgroundColor: "red" }} />
+            <FaTimes
+              className="icon iconSmall me-3"
+              style={{ backgroundColor: "red" }}
+            />
           </Link>
         </span>
       </div>

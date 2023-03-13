@@ -99,6 +99,18 @@ const Dashboard = () => {
                   {pending}
                 </span>
               </div>
+              <div className="mt-3">
+                {pending > 0 ? (
+                  <Link
+                    to="pending"
+                    className="text-decoration-none ridelink-color"
+                  >
+                    View orders pending
+                  </Link>
+                ) : (
+                  <span className="text-muted">No orders delivered</span>
+                )}
+              </div>
             </div>
             <div
               style={{ width: "367px" }}
@@ -114,6 +126,18 @@ const Dashboard = () => {
                 <span className="me-3" style={{ fontSize: "30px" }}>
                   {confirmed}
                 </span>
+              </div>
+              <div className="mt-3">
+                {confirmed > 0 ? (
+                  <Link
+                    to="confirmed"
+                    className="text-decoration-none ridelink-color"
+                  >
+                    View orders confirmed/ delivered
+                  </Link>
+                ) : (
+                  <span className="text-muted">No orders delivered</span>
+                )}
               </div>
             </div>
             {/* <div

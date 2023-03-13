@@ -6,6 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../config/firebase";
 import Loader from "./Loader";
 import { useOrders } from "../context/StateProvider";
+import { FaTimes } from "react-icons/fa";
 
 const Confirmed = () => {
   const [delivered, setDelivered] = useState(0);
@@ -50,8 +51,16 @@ const Confirmed = () => {
   }
   return (
     <div>
-      <div className="mx-3 pt-3 lead text-muted">
+      <div className="mx-3 pt-3 lead text-muted d-flex justify-content-between align-items-center">
         <span>Confirmed Orders</span>
+        <span>
+          <Link to="/" className="text-decoration-none ridelink-color">
+            <FaTimes
+              className="icon iconSmall me-3"
+              style={{ backgroundColor: "red" }}
+            />
+          </Link>
+        </span>
       </div>
       {display && (
         <div>

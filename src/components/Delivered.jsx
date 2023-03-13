@@ -48,7 +48,10 @@ const Delivered = () => {
 
         <span>
           <Link to="/confirmed" className="text-decoration-none ridelink-color">
-            <FaTimes className="icon me-3" style={{ backgroundColor: "red" }} />
+            <FaTimes
+              className="icon iconSmall me-3"
+              style={{ backgroundColor: "red" }}
+            />
           </Link>
         </span>
       </div>

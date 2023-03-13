@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaTruckMoving } from "react-icons/fa";
+import { FaTruckMoving, FaTimes } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useOrders } from "../context/StateProvider";
 import { Link } from "react-router-dom";
@@ -69,8 +69,16 @@ const Pending = () => {
   }
   return (
     <div>
-      <div className="mx-3 pt-3 lead text-muted">
+      <div className="mx-3 pt-3 lead text-muted d-flex justify-content-between align-items-center">
         <span>Pending Orders</span>
+        <span>
+          <Link to="/" className="text-decoration-none ridelink-color">
+            <FaTimes
+              className="icon iconSmall me-3"
+              style={{ backgroundColor: "red" }}
+            />
+          </Link>
+        </span>
       </div>
 
       {display && (
@@ -188,6 +196,11 @@ const Pending = () => {
               </div>
             );
           })}
+          <div className="m-3">
+            <Link to="/" className="text-decoration-none ridelink-color">
+              Return to Dashboard
+            </Link>
+          </div>
         </div>
       )}
 
