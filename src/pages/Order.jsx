@@ -32,7 +32,8 @@ const Order = () => {
   // eslint-disable-next-line
   const [directionsResponse, setDirectionsResponse] = useState(null);
   const [distance, setDistance] = useState();
-  const orderCollectionRef = collection(db, "orders");
+  const orderCollectionRef = collection(db, "eOrders");
+
   useEffect(() => {
     const calculateAmount = (distance) => {
       return distance * 5;

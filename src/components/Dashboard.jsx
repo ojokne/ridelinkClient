@@ -21,8 +21,8 @@ const Dashboard = () => {
     const unsubcribeFromAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
         const querySnapShot = query(
-          collection(db, "orders"),
-          "orders",
+          collection(db, "eOrders"),
+          "eOrders",
           where("clientId", "==", auth.currentUser.uid)
         );
         unsubcribeFromFirestore = onSnapshot(querySnapShot, (snapshot) => {
@@ -32,7 +32,6 @@ const Dashboard = () => {
           } else {
             for (let i = 0; i < snapshot.docs.length; i++) {
               let order = snapshot.docs[i].data();
-              console.log(order);
               if (order.isConfirmed) {
                 setConfirmed((prev) => prev + 1);
               } else {
